@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fystyle Productos</title>
+    
+    <!-- Dependencias (Bootstrap y Fuentes) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- PWA (Manifiesto y tema) -->
+    <link rel="manifest" href="./manifest.webmanifest">
+    <meta name="theme-color" content="#014421">
+    <link rel="apple-touch-icon" href="./icons/icon.png">
+
+    <!-- Estilos Generales -->
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: 'poppins', sans-serif;
+        }
+        h1, h2, h3, h4, h5, .card-title {
+            font-family: 'poppins', sans-serif;
+        }
+        .header-bar {
+            background-color: #014421;
+            height: 80px;
+            display: flex;
+            align-items: center; 
+            justify-content: space-between;
+            color: white;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+        .header-logo {
+            height: 50px;
+            width: auto;
+            margin-right: 15px;
+        }
+        .header-icons {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .header-icons i {
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .subheader-bar {
+            background-color: #c0c0c0;
+            color: #333;
+            padding: 0.5rem;
+        }
+        .buttons-container {
+            display: flex; 
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .btn-custom {
+            background-color: #c0c0c0;
+            color: black;
+            border: none;
+            font-family: 'poppins', sans-serif;
+        }
+        .btn-custom:hover {
+            background-color: #a9a9a9;
+        }
+        .card-header {
+            background-color: #014421 !important;
+            display: flex;
+            justify-content: flex-end;
+            padding: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- === Header === -->
+    <div class="header-bar">
+        <div class="d-flex align-items-center">
+            <img src="icons/logo sin fondo blanco.png" alt="fitsyle logo" class="header-logo">
+            <h1 class="display-6 mb-0" style="font-size: 1.75rem;">Fitsyle</h1>
+        </div>
+        
+        <div class="header-icons">
+            <i class="bi bi-heart"></i>
+            <i class="bi bi-bag"></i>
+            <i class="bi bi-person-circle"></i>
+        </div>
+    </div>
+
+    <!-- === Subheader === -->
+    <div class="subheader-bar text-center">
+        <h2 class="mb-0">Formulario De Productos</h2>
+    </div>
+
+    
+    <!-- === Botones === -->
+    <div class="container py-5 text-center">
+        <div class="buttons-container">
+            <button type="button" class="btn btn-custom btn-lg" data-bs-toggle="modal" data-bs-target="#productoModal">
+                Registrar nuevo producto
+            </button>
+            <button id="clearAll" class="btn btn-custom btn-lg ms-2">
+                Limpiar todo (LocalStorage)
+            </button>
+        </div>
+    </div>
+
+    <!-- === Contenedor de Productos === -->
+    <div class="container">
+        <div id="productsContainer" class="row mt-3"></div>
+    </div>
+    
+
+    <!-- === Modal de Registro === -->
+    <div class="modal fade" id="productoModal" tabindex="-1" aria-labelledby="productoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#014421; color:white;">
+                    <h5 class="modal-title" id="productoModalLabel">Registrar Nuevos Productos</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-4">
+                    
+                    <!-- ========== FORMULARIO ACTUALIZADO ========== -->
+                    <form id="productoForm">
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="form-label">Producto</label>
+                                <input type="text" class="form-control" id="producto" required />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Clave</label>
+                                <input type="text" class="form-control" id="clave" required />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Precio</label>
+                                <input type="number" class="form-control" id="precio" placeholder="0.00" step="0.01" required />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Stock</label>
+                                <input type="number" class="form-control" id="stock" required />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Categoría</label>
+                                <select id="categoria" class="form-select" required>
+                                    <option value="" disabled selected>Seleccionar</option>
+                                    <option>Hombre</option>
+                                    <option>Mujer</option>
+                                    <option>Segunda oportunidad</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Marca</label>
+                                <select id="marca" class="form-select" required>
+                                    <option value="" disabled selected>Seleccionar</option>
+                                    <option>ADIDAS</option>
+                                    <option>NIKE</option>
+                                    <option>ON</option>
+                                    <option>BALENCIAGA</option>
+                                    <option>ASIC</option>
+                                    <option>HOKA</option>
+                                    <option>DOLCE&GABANA</option>
+                                    <option>SALOMON</option>
+                                    <option>ALO</option>
+                                    <option>VERSACE</option>
+                                    <option value="otro">OTRO</option>
+                                </select>
+                                <input type="text" id="marcaOtro" class="form-control mt-2 d-none" placeholder="Escribe la marca">
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Tipo de producto</label>
+                                <select id="tipo" class="form-select" required>
+                                    <option value="" disabled selected>Seleccionar</option>
+                                    <option>CALZADO DE MUJER</option>
+                                    <option>CALZADO DE HOMBRE</option>
+                                    <option>CALZADO DE SEGUNDA OPORTUNIDAD</option>
+                                    <option>JOGGER/LEGGING DE MUJERES</option>
+                                    <option>JOGGER/LEGGING DE HOMBRES</option>
+                                    <option>JOGGER/LEGGING DE SEGUNDA OPORTUNIDAD</option>
+                                    <option>PLAYERAS/TOPS MUJERES</option>
+                                    <option>PLAYERAS HOMBRES</option>
+                                    <option>PLAYERAS/TOPS DE SEGUNDA OPORTUNIDAD</option>
+                                    <option>SUDADERAS/HOODIES DE MUJERES</option>
+                                    <option>SUDADERAS/HOODIES DE HOMBRES</option>
+                                    <option>SUDADERAS/HOODIES DE SEGUNDA OPORTUNIDAD</option>
+                                    <option>SHORTS/FALDA DEPORTIVA DE MUJERES</option>
+                                    <option>SHORTS DE HOMBRES</option>
+                                    <option>SHORTS/FALDA DE SEGUNDA OPORTUNIDAD</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Descripción</label>
+                                <textarea class="form-control" id="descripcion" rows="3"></textarea>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Imágenes del producto</label>
+                                <input type="file" id="imagenes" class="form-control" accept="image/*" multiple />
+                                <div class="form-text">se guardan temporalmente en el localstorage.</div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">cancelar</button>
+                    <button type="submit" form="productoForm" class="btn btn-custom">guardar producto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const modal = new bootstrap.Modal(document.getElementById('productoModal'));
+        let productos = [];
+        const LS_KEY = 'productos';
+
+        function saveToLS() {
+            localStorage.setItem(LS_KEY, JSON.stringify(productos));
+        }
+
+        function loadFromLS() {
+            const raw = localStorage.getItem(LS_KEY);
+            productos = raw ? JSON.parse(raw) : [];
+        }
+
+        async function readFilesAsDataURLs(fileList) {
+            const files = Array.from(fileList || []);
+            const readers = files.map(file => new Promise((resolve, reject) => {
+                const fr = new FileReader();
+                fr.onload = () => resolve({ name: file.name, type: file.type, dataURL: fr.result });
+                fr.onerror = reject;
+                fr.readAsDataURL(file);
+            }));
+            return Promise.all(readers);
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = ""; 
+
+            productos.forEach((producto, idx) => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6 col-lg-4 mb-4';
+
+                const imagenHtml = (producto.imagenes && producto.imagenes.length > 0)
+                    ? `<img src="${producto.imagenes[0].dataURL}" class="card-img-top" alt="${producto.producto}" style="height: 300px; object-fit: contain;">`
+                    : '<div class="card-img-top text-center text-muted p-5" style="height: 300px; display: grid; place-items: center; background-color: #eee;"><span>sin imagen</span></div>';
+
+                col.innerHTML = `
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header text-white">
+                            <button class="btn btn-sm btn-light" data-action="delete" data-index="${idx}">
+                                <i class="bi bi-trash3"></i>
+                            </button>
+                        </div>
+                        ${imagenHtml}
+                        <div class="card-body">
+                            <h5 class="card-title fs-3">${producto.producto}</h5>
+                            <p class="card-text display-6 mb-3">$${Number(producto.precio).toFixed(2)}</p>
+
+                            <p class="card-text"><strong>clave:</strong> ${producto.clave}</p>
+                            <p class="card-text"><strong>stock:</strong> ${producto.stock} unidades</p>
+
+                            <p class="card-text"><strong>categoria:</strong> ${producto.categoria}</p>
+                            <p class="card-text"><strong>marca:</strong> ${producto.marca}</p>
+                            <p class="card-text"><strong>tipo:</strong> ${producto.tipo}</p>
+
+                            <p class="card-text"><strong>descripcion:</strong> ${producto.descripcion || 'sin descripcion'}</p>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(col);
+            });
+
+            container.querySelectorAll('[data-action="delete"]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const i = Number(e.currentTarget.getAttribute('data-index'));
+                    if (confirm(`seguro que deseas eliminar "${productos[i].producto}"?`)) {
+                        productos.splice(i, 1);
+                        saveToLS();
+                        renderProducts();
+                    }
+                });
+            });
+        }
+
+        document.getElementById('marca').addEventListener('change', function () {
+            const otro = document.getElementById('marcaOtro');
+            if (this.value === 'otro') {
+                otro.classList.remove('d-none');
+            } else {
+                otro.classList.add('d-none');
+                otro.value = "";
+            }
+        });
+
+        document.getElementById('productoForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const productoVal = document.getElementById('producto').value.trim();
+            const claveVal = document.getElementById('clave').value.trim();
+            const precioVal = document.getElementById('precio').value.trim();
+            const stockVal = document.getElementById('stock').value.trim();
+            const categoriaVal = document.getElementById('categoria').value;
+            const marcaSelectVal = document.getElementById('marca').value;
+            const marcaOtroVal = document.getElementById('marcaOtro').value.trim();
+            const tipoVal = document.getElementById('tipo').value;
+
+            if (marcaSelectVal === "otro" && marcaOtroVal === "") {
+                alert("Debes escribir la marca en el campo 'OTRO'.");
+                return;
+            }
+
+            if (
+                !productoVal ||
+                !claveVal ||
+                !precioVal ||
+                !stockVal ||
+                !categoriaVal ||
+                !marcaSelectVal ||
+                !tipoVal
+            ) {
+                alert("Por favor completa todos los campos obligatorios.");
+                return;
+            }
+
+            let imagenes = [];
+            try {
+                imagenes = await readFilesAsDataURLs(document.getElementById('imagenes').files);
+            } catch (err) {}
+
+            const producto = {
+                id: crypto.randomUUID(),
+                producto: productoVal,
+                clave: claveVal,
+                precio: parseFloat(precioVal),
+                stock: parseInt(stockVal),
+
+                categoria: categoriaVal,
+                marca: marcaSelectVal === "otro" ? marcaOtroVal : marcaSelectVal,
+                tipo: tipoVal,
+
+                descripcion: document.getElementById('descripcion').value.trim(),
+                imagenes,
+            };
+
+            productos.push(producto);
+            saveToLS();
+            renderProducts();
+
+            this.reset();
+            modal.hide();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromLS();
+            renderProducts();
+            
+            document.getElementById('clearAll').addEventListener('click', () => {
+                if (confirm('seguro que deseas borrar todos los productos?')) {
+                    productos = [];
+                    saveToLS();
+                    renderProducts();
+                }
+            });
+        });
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+            });
+        }
+    </script>
+
+</body>
+</html>
